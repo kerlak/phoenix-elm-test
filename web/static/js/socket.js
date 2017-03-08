@@ -51,12 +51,25 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 // Finally, pass the token on connect as below. Or remove it
 // from connect if you don't care about authentication.
 
+// Elm integration
+const elmDiv = document.getElementById('elm-main')
+    , elmApp = Elm.TestApp.embed(elmDiv)
+
+const showMessage = function (message, resp) {
+    elmApp.ports.input.send(`${message}: ${JSON.stringify(resp)}`);
+  }
+
+elmApp.ports.output.subscribe(function (message) {
+    console.log(message);
+});
+// Elm integration
+
 socket.connect()
 
 // Now that you are connected, you can join channels with a topic:
 let channel = socket.channel("topic:subtopic", {})
 channel.join()
-  .receive("ok", resp => { console.log("Joined successfully", resp) })
-  .receive("error", resp => { console.log("Unable to join", resp) })
+  .receive("ok", resp => { showMessage("Joined successfully", resp) })
+  .receive("error", resp => { showMessage("Unable to join", resp) })
 
 export default socket

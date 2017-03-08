@@ -1,4 +1,4 @@
-module TestApp exposing (..)
+port module TestApp exposing (..)
 import Html exposing (Html, Attribute, div, text)
 import Html.Attributes exposing (..)
 import Time exposing (Time, second)
@@ -17,6 +17,7 @@ main =
 type alias Model =
   { currentTime : Time
   , goalTime : Time
+  , message : String
   }
 
 goalTimeString = "2017-04-21 14:00:00"
@@ -24,24 +25,39 @@ goalTime = createTime goalTimeString
 
 model : (Model, Cmd Msg)
 model =
-  (Model 0 goalTime, Cmd.none)
+  (Model 0 goalTime "no message yet", Cmd.none)
+
+--
+port input : (String -> msg) -> Sub msg
+port output : String -> Cmd msg
+--
 
 -- UPDATE
 
 type Msg
   = Tick Time
+  | GetMessage String
+  | SendMessage Time
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     Tick newTime ->
-      (Model newTime model.goalTime, Cmd.none)
+      (Model newTime model.goalTime model.message, Cmd.none)
+    GetMessage message ->
+      (Model model.currentTime model.goalTime message, Cmd.none)
+    SendMessage message ->
+      (Model model.currentTime model.goalTime model.message, output ("Hi! I'm Elm and i say tha it's: " ++ toString(message)))
 
 -- SUBSCRIPTIONS
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  Time.every second Tick
+  Sub.batch
+        [ Time.every second Tick
+        , input GetMessage
+        , Time.every second SendMessage
+        ]
 
 -- UTIL FUNCTIONS
 
@@ -106,4 +122,5 @@ view model =
   in
     div [ ] [
         div [ ] [ text countdown ]
+      , div [ ] [ text model.message ]
     ]
