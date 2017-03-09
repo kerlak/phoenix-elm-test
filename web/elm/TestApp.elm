@@ -3,6 +3,7 @@ import Html exposing (Html, Attribute, div, text)
 import Html.Attributes exposing (..)
 import Time exposing (Time, second)
 import Date exposing (Date)
+import Mouse exposing (position)
 
 main =
   Html.program
@@ -29,7 +30,7 @@ model =
 
 --
 port input : (String -> msg) -> Sub msg
-port output : String -> Cmd msg
+port output : (String, Mouse.Position) -> Cmd msg
 --
 
 -- UPDATE
@@ -37,7 +38,7 @@ port output : String -> Cmd msg
 type Msg
   = Tick Time
   | GetMessage String
-  | SendMessage Time
+  | SendWave Mouse.Position
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -46,8 +47,8 @@ update msg model =
       (Model newTime model.goalTime model.message, Cmd.none)
     GetMessage message ->
       (Model model.currentTime model.goalTime message, Cmd.none)
-    SendMessage message ->
-      (Model model.currentTime model.goalTime model.message, output ("Hi! I'm Elm and i say tha it's: " ++ toString(message)))
+    SendWave position ->
+      (Model model.currentTime model.goalTime model.message, output ("wave", position))
 
 -- SUBSCRIPTIONS
 
@@ -56,7 +57,7 @@ subscriptions model =
   Sub.batch
         [ Time.every second Tick
         , input GetMessage
-        , Time.every second SendMessage
+        , Mouse.clicks SendWave
         ]
 
 -- UTIL FUNCTIONS
