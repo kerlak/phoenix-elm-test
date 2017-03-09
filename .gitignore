@@ -25,3 +25,4 @@ erl_crash.dump
 
 # Elm stuff
 /web/elm/elm-stuff
+/web/static/vendor/
