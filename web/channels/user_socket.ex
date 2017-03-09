@@ -3,6 +3,7 @@ defmodule Pet.UserSocket do
 
   ## Channels
   # channel "room:*", Pet.RoomChannel
+  channel "room:lobby", Pet.RoomChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
