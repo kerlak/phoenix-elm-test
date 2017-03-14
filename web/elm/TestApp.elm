@@ -6,6 +6,7 @@ import Date exposing (Date)
 import Mouse exposing (position)
 import AnimationFrame exposing (..)
 
+main : Program Never Model Msg
 main =
   Html.program
     { init = model
@@ -85,11 +86,32 @@ createTime str =
   |> Date.toTime
 
 -- VIEW
+myStyle : Attribute msg
 myStyle =
   style
     [ ("width", "100%")
     , ("height", "100%")
     , ("font-family", "Arial")
+    ]
+
+vintageStyle : Attribute msg
+vintageStyle =
+  style
+    [ ("background", "linear-gradient(to bottom, #01075d 10%, #d1e2ff 50%, #030002 50%, #d401d9 70%, #fdeef1 90%")
+    , ("-webkit-background-clip", "text")
+    , ("-webkit-text-fill-color", "transparent")
+    , ("font-size", "40px")
+    , ("font-family", "Audiowide")
+    ]
+
+circleStyle : Attribute msg
+circleStyle =
+  style
+    [ ("position", "absolute")
+    , ("width", "20px")
+    , ("height", "20px")
+    , ("border-radius", "10px")
+    , ("background-color", "#222")
     ]
 
 view : Model -> Html Msg
@@ -131,17 +153,19 @@ view model =
 
     countdown =
       String.append (twoDigitString ndays)
-      <| String.append " "
+      <| String.append "d "
       <| String.append (twoDigitString nhours)
-      <| String.append ":"
+      <| String.append "h "
       <| String.append (twoDigitString nminutes)
-      <| String.append ":"
+      <| String.append "m "
       <| String.append (twoDigitString nseconds)
-      <| String.append ":"
-      <| (threeDigitString nmillis)
+      <| String.append "s "
+      <| String.append (threeDigitString nmillis)
+      <| "ms"
 
   in
     div [ ] [
-        div [ ] [ text countdown ]
-      , div [ ] [ text model.message ]
+      --   div [ vintageStyle ] [ text countdown ]
+      -- , div [ ] [ text model.message ]
+       div [ circleStyle ] [ ]
     ]

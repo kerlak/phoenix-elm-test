@@ -9,6 +9,7 @@
 
     <title>Hello TestApp!</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <link href="https://fonts.googleapis.com/css?family=Audiowide" rel="stylesheet">
   </head>
 
   <body>
