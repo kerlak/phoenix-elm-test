@@ -4,6 +4,7 @@ import Html.Attributes exposing (..)
 import Time exposing (Time, second)
 import Date exposing (Date)
 import Mouse exposing (position)
+import AnimationFrame exposing (..)
 
 main =
   Html.program
@@ -55,12 +56,21 @@ update msg model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch
-        [ Time.every second Tick
+        [ AnimationFrame.times Tick
         , input GetMessage
         , Mouse.clicks SendWave
         ]
 
 -- UTIL FUNCTIONS
+threeDigitString number =
+  if number < 100 && number > 10 then
+    toString number
+    |> String.append "0"
+  else if number < 10 then
+    toString number
+    |> String.append "00"
+  else
+    toString number
 
 twoDigitString number =
   if number < 10 then
@@ -111,6 +121,14 @@ view model =
       |> (flip (-))(nhours * 60 * 60)
       |> (flip (-))(nminutes * 60)
 
+    nmillis =
+      Time.inMilliseconds delta
+      |> floor
+      |> (flip (-))(ndays * 24 * 60 * 60 * 1000)
+      |> (flip (-))(nhours * 60 * 60 * 1000)
+      |> (flip (-))(nminutes * 60 * 1000)
+      |> (flip (-))(nseconds * 1000)
+
     countdown =
       String.append (twoDigitString ndays)
       <| String.append " "
@@ -118,7 +136,9 @@ view model =
       <| String.append ":"
       <| String.append (twoDigitString nminutes)
       <| String.append ":"
-      <| (twoDigitString nseconds)
+      <| String.append (twoDigitString nseconds)
+      <| String.append ":"
+      <| (threeDigitString nmillis)
 
   in
     div [ ] [
