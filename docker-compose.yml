@@ -16,6 +16,6 @@ services:
     ports:
       - 4000:4000
     volumes:
-      - ./:/code:ro
+      - ./:/code
     # entrypoint: /bin/bash -c "set -e -x && yes | apt-get update && yes | apt-get install erlang-parsetools && yes | apt-get install esl-erlang && mkdir /home/production && cp -R code/* /home/production/ && cd /home/production && mkdir -p priv/repo/migrations && yes | mix deps.clean --all && mix local.hex --force && yes | mix deps.get && yes | mix ecto.create && yes | mix ecto.migrate && npm install && mix phoenix.server"
-    entrypoint: /bin/bash -c "set -e -x && mkdir /home/production && cp -R code/* /home/production/ && cd /home/production && mkdir -p priv/repo/migrations && yes | mix local.rebar --force && yes | mix deps.get && mix ecto.create && mix ecto.migrate && yes | npm install && mix phoenix.server"
+    entrypoint: /bin/bash -c "set -e -x && cd /code && mkdir -p priv/repo/migrations && yes | mix local.rebar --force && yes | mix deps.get && mix ecto.create && mix ecto.migrate && yes | npm install && mix phoenix.server"
