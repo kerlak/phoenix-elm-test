@@ -1,6 +1,8 @@
 port module TestApp exposing (..)
-import Html exposing (Html, Attribute, div, text)
+import Html exposing (Html, Attribute, div, text, li)
+import Html.Keyed as Keyed
 import Html.Attributes exposing (..)
+import Html.Lazy exposing (lazy)
 import Time exposing (Time, second)
 import Date exposing (Date)
 import Mouse exposing (position)
@@ -21,6 +23,7 @@ type alias Model =
   { currentTime : Time
   , goalTime : Time
   , message : String
+  , points : List Mouse.Position
   }
 
 goalTimeString = "2017-04-21 14:00:00"
@@ -28,10 +31,10 @@ goalTime = createTime goalTimeString
 
 model : (Model, Cmd Msg)
 model =
-  (Model 0 goalTime "no message yet", Cmd.none)
+  (Model 0 goalTime "no messages" [], Cmd.none)
 
 --
-port input : (String -> msg) -> Sub msg
+port input : (Mouse.Position -> msg) -> Sub msg
 port output : (String, Mouse.Position) -> Cmd msg
 --
 
@@ -39,18 +42,18 @@ port output : (String, Mouse.Position) -> Cmd msg
 
 type Msg
   = Tick Time
-  | GetMessage String
+  | GetMessage Mouse.Position
   | SendWave Mouse.Position
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     Tick newTime ->
-      (Model newTime model.goalTime model.message, Cmd.none)
+      (Model newTime model.goalTime model.message model.points, Cmd.none)
     GetMessage message ->
-      (Model model.currentTime model.goalTime message, Cmd.none)
+      (Model model.currentTime model.goalTime model.message (message :: model.points), Cmd.none)
     SendWave position ->
-      (Model model.currentTime model.goalTime model.message, output ("wave", position))
+      (Model model.currentTime model.goalTime model.message model.points, output ("wave", position))
 
 -- SUBSCRIPTIONS
 
@@ -104,19 +107,44 @@ vintageStyle =
     , ("font-family", "Audiowide")
     ]
 
-circleStyle : Attribute msg
-circleStyle =
-  style
-    [ ("position", "absolute")
-    , ("width", "20px")
-    , ("height", "20px")
-    , ("border-radius", "10px")
-    , ("background-color", "#222")
-    ]
+showPoint point =
+  let
+    circleRadius =
+      10
+    circleRadiusPx =
+      "px"
+      |> String.append(toString((circleRadius * 2)))
+    borderRadiusPx =
+      "px"
+      |> String.append(toString((circleRadius * 2)))
+    top =
+      "px"
+      |> String.append(twoDigitString (point.y - circleRadius))
+    left =
+      "px"
+      |> String.append(twoDigitString (point.x - circleRadius))
+
+    circleStyle =
+      style
+        [ ("position", "absolute")
+        , ("width", circleRadiusPx)
+        , ("height", circleRadiusPx)
+        , ("border-radius", borderRadiusPx)
+        , ("background-color", "#222")
+        , ("top", top)
+        , ("left", left)
+        ]
+
+  in
+    div [ circleStyle ] [ ]
+
+showPoints point =
+    ( toString point.x, lazy showPoint point )
 
 view : Model -> Html Msg
 view model =
   let
+
     delta =
       model.goalTime - model.currentTime
 
@@ -165,7 +193,7 @@ view model =
 
   in
     div [ ] [
-      --   div [ vintageStyle ] [ text countdown ]
-      -- , div [ ] [ text model.message ]
-       div [ circleStyle ] [ ]
+        div [ vintageStyle ] [ text countdown ]
+      , Keyed.ul [ ] <|
+          List.map showPoints model.points
     ]

@@ -39,5 +39,5 @@ config :pet, Pet.Repo,
   username: "postgres",
   password: "postgres",
   database: "pet_dev",
-  hostname: "localhost",
+  hostname: System.get_env("DATABASE_HOST") || "localhost",
   pool_size: 10

@@ -56,18 +56,16 @@ const elmDiv = document.getElementById('elm-main')
     , elmApp = Elm.TestApp.embed(elmDiv)
 
 const showMessage = function (message, resp) {
-  elmApp.ports.input.send(`${message}: ${JSON.stringify(resp)}`);
-  console.log(message, JSON.stringify(resp))
+  elmApp.ports.input.send(resp);
 }
 // Elm integration
-
 socket.connect()
 
 // Now that you are connected, you can join channels with a topic:
 let channel = socket.channel("room:lobby", {})
 channel.join()
-  .receive("ok", resp => { showMessage("Joined successfully", resp) })
-  .receive("error", resp => { showMessage("Unable to join", resp) })
+  .receive("ok", resp => { console.log("Joined successfully", resp) })
+  .receive("error", resp => { console.log("Unable to join", resp) })
 
 // Elm integration
 elmApp.ports.output.subscribe(function (elmMessage) {
