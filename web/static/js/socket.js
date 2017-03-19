@@ -93,7 +93,7 @@ elmApp.ports.output.subscribe(function (elmMessage) {
 channel.on("walk", payload => {
   const position = {
     x: payload.position_x,
-    y: payload.position_y
+    y: Math.max(payload.position_y, 400)
   };
   const resp = {
     id: payload.id,

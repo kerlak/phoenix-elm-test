@@ -156,10 +156,19 @@ vintageStyle =
     , ("font-size", "40px")
     , ("font-family", "Audiowide")
     ]
+absoluteRight : Attribute msg
+absoluteRight =
+  style
+    [ ("position", "absolute")
+    , ("right", "10px")
+    , ("top", "10px")
+    , ("color", "#fff")
+    , ("font-family", "Roboto")
+    ]
 showEye point =
   let
     circleRadius =
-      10
+      5
     circleRadiusPx =
       "px"
       |> String.append(toString((circleRadius * 2)))
@@ -176,17 +185,17 @@ showEye point =
     circleStyle =
       style
         [ ("position", "absolute")
-        , ("width", circleRadiusPx)
-        , ("height", circleRadiusPx)
-        , ("border-radius", borderRadiusPx)
-        , ("background-color", "#222")
+        -- , ("width", circleRadiusPx)
+        -- , ("height", circleRadiusPx)
+        -- , ("border-radius", borderRadiusPx)
+        -- , ("background-color", "#222")
         , ("top", top)
         , ("left", left)
         , ("transition", "top 1s ease-out, left 1s ease-out")
         ]
 
   in
-    div [ circleStyle ] [ ]
+    div [ circleStyle, class "eyes" ] [ ]
 
 showEyes eye =
     ( toString eye.id, lazy showEye eye.position )
@@ -243,7 +252,7 @@ view model =
 
   in
     div [ ] [
-        div [ vintageStyle ] [ text countdown ]
+        div [ absoluteRight ] [ text countdown ]
       , Keyed.ul [ ] <|
           List.map showEyes model.eyes
     ]
