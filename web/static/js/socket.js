@@ -56,7 +56,24 @@ const elmDiv = document.getElementById('elm-main')
     , elmApp = Elm.TestApp.embed(elmDiv)
 
 const showMessage = function (message, resp) {
+  console.log(resp);
   elmApp.ports.input.send(resp);
+}
+
+const initEyes = function (payload) {
+  const eyes = payload.map(eye => {
+    const position = {
+      x: eye.position_x,
+      y: eye.position_y
+    };
+    const resp = {
+      id: eye.id,
+      life: eye.life,
+      position
+    }
+    return resp;
+  })
+  elmApp.ports.init.send({items: eyes});
 }
 // Elm integration
 socket.connect()
@@ -64,7 +81,7 @@ socket.connect()
 // Now that you are connected, you can join channels with a topic:
 let channel = socket.channel("room:lobby", {})
 channel.join()
-  .receive("ok", resp => { console.log("Joined successfully", resp) })
+  .receive("ok", resp => { console.log("Joined successfully", resp); initEyes(resp);})
   .receive("error", resp => { console.log("Unable to join", resp) })
 
 // Elm integration
@@ -73,8 +90,21 @@ elmApp.ports.output.subscribe(function (elmMessage) {
   channel.push(message, body)
 });
 
-channel.on("wave", payload => {
-  showMessage("new wave generated at: ", payload);
+channel.on("walk", payload => {
+  const position = {
+    x: payload.position_x,
+    y: payload.position_y
+  };
+  const resp = {
+    id: payload.id,
+    life: payload.life,
+    position
+  }
+  elmApp.ports.input.send(resp);
+})
+
+channel.on("delete_eye", payload => {
+  elmApp.ports.remove.send(payload.id);
 })
 // Elm integration
 

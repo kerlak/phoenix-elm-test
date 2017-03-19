@@ -18,23 +18,33 @@ main =
     }
 
 -- MODEL
+type alias Eyes =
+  { items: List Eye }
+
+type alias Eye =
+  { id: String
+  , life: Int
+  , position: Mouse.Position
+  }
 
 type alias Model =
   { currentTime : Time
   , goalTime : Time
-  , message : String
-  , points : List Mouse.Position
+  , eyes : List Eye
   }
-
+goalTimeString : String
 goalTimeString = "2017-04-21 14:00:00"
+goalTime : Time
 goalTime = createTime goalTimeString
 
 model : (Model, Cmd Msg)
 model =
-  (Model 0 goalTime "no messages" [], Cmd.none)
+  (Model 0 goalTime [], Cmd.none)
 
 --
-port input : (Mouse.Position -> msg) -> Sub msg
+port init : (Eyes -> msg) -> Sub msg
+port input : (Eye -> msg) -> Sub msg
+port remove : (String -> msg) -> Sub msg
 port output : (String, Mouse.Position) -> Cmd msg
 --
 
@@ -42,19 +52,54 @@ port output : (String, Mouse.Position) -> Cmd msg
 
 type Msg
   = Tick Time
-  | GetMessage Mouse.Position
+  | GetMessage Eye
+  | SetEyes Eyes
+  | RemoveEye String
   | SendWave Mouse.Position
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     Tick newTime ->
-      (Model newTime model.goalTime model.message model.points, Cmd.none)
+      ({ model | currentTime = newTime }, Cmd.none)
+    SetEyes all_eyes ->
+      ({ model | eyes = (set_eyes(all_eyes)) }, Cmd.none)
+    RemoveEye id ->
+      ({ model | eyes = (remove_eye(model, id)) }, Cmd.none)
     GetMessage message ->
-      (Model model.currentTime model.goalTime model.message (message :: model.points), Cmd.none)
+      ({ model | eyes = (update_eyes(model, message)) }, Cmd.none)
     SendWave position ->
-      (Model model.currentTime model.goalTime model.message model.points, output ("wave", position))
+      (model, output ("walk", position))
 
+set_eyes (all_eyes) =
+  List.map (\eye -> new_eye(eye)) all_eyes.items
+
+new_eye message =
+  ( Eye message.id message.life message.position )
+
+remove_eye (model, id) =
+  List.filter (\eye -> (eye.id /= id)) model.eyes
+
+update_eyes (model, message) =
+  let
+    is_new_eye = not (List.any (\eye -> (eye.id == message.id)) model.eyes)
+  in
+    if is_new_eye then
+      add_eye(model, message)
+    else
+      List.map (\eye -> update_eye(eye, message)) model.eyes
+
+add_eye (model, message) =
+  let
+    eye = new_eye message
+  in
+    eye :: model.eyes
+
+update_eye (eye, message) =
+  if eye.id == message.id then
+    { eye | position = message.position }
+  else
+    eye
 -- SUBSCRIPTIONS
 
 subscriptions : Model -> Sub Msg
@@ -62,10 +107,13 @@ subscriptions model =
   Sub.batch
         [ AnimationFrame.times Tick
         , input GetMessage
-        , Mouse.clicks SendWave
+        , init SetEyes
+        , remove RemoveEye
+        , Mouse.moves SendWave
         ]
 
 -- UTIL FUNCTIONS
+threeDigitString : Int -> String
 threeDigitString number =
   if number < 100 && number > 10 then
     toString number
@@ -76,6 +124,7 @@ threeDigitString number =
   else
     toString number
 
+twoDigitString : Int -> String
 twoDigitString number =
   if number < 10 then
     toString number
@@ -83,6 +132,7 @@ twoDigitString number =
   else
     toString number
 
+createTime : String -> Time
 createTime str =
   Date.fromString str
   |> Result.withDefault (Date.fromTime 0)
@@ -106,8 +156,7 @@ vintageStyle =
     , ("font-size", "40px")
     , ("font-family", "Audiowide")
     ]
-
-showPoint point =
+showEye point =
   let
     circleRadius =
       10
@@ -133,13 +182,14 @@ showPoint point =
         , ("background-color", "#222")
         , ("top", top)
         , ("left", left)
+        , ("transition", "top 1s ease-out, left 1s ease-out")
         ]
 
   in
     div [ circleStyle ] [ ]
 
-showPoints point =
-    ( toString point.x, lazy showPoint point )
+showEyes eye =
+    ( toString eye.id, lazy showEye eye.position )
 
 view : Model -> Html Msg
 view model =
@@ -195,5 +245,5 @@ view model =
     div [ ] [
         div [ vintageStyle ] [ text countdown ]
       , Keyed.ul [ ] <|
-          List.map showPoints model.points
+          List.map showEyes model.eyes
     ]

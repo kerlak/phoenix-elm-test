@@ -14,6 +14,7 @@ defmodule Pet do
       supervisor(Pet.Endpoint, []),
       # Start your own worker by calling: Pet.Worker.start_link(arg1, arg2, arg3)
       # worker(Pet.Worker, [arg1, arg2, arg3]),
+      supervisor(Pet.Eyes, []),
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
