@@ -78,7 +78,7 @@
     border-bottom: 200px solid #2f2f33;
   }
 
-  .eyes:before {
+  /*.eyes:before {
     position: absolute;
     content: '';
     right: -4px;
@@ -96,10 +96,18 @@
     height: 8px;
     border-radius: 4px;
     background-color: #ddd;
-  }
+  }*/
 
-
-
+    .eyes{
+      position: absolute;
+      left:-100px;
+      display: block;
+      width: 40px;
+      height: 20px;
+      background: url("/images/eye-1.svg");
+      background-size: 40px 20px;
+    }
+    
 </style>
 <div class="all" >
   <div class="back">
