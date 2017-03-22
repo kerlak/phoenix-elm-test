@@ -195,7 +195,7 @@ showEye point =
         ]
 
   in
-    div [ circleStyle, class "eyes" ] [ ]
+    div [ circleStyle, class "eyes", class "type3" ] [ ]
 
 showEyes eye =
     ( toString eye.id, lazy showEye eye.position )

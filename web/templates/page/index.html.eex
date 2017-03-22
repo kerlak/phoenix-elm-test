@@ -104,10 +104,22 @@
       display: block;
       width: 40px;
       height: 20px;
-      background: url("/images/eye-1.svg");
       background-size: 40px 20px;
     }
-    
+
+    .eyes.type1 {
+      background: url("/images/eye-1.svg");
+      background-repeat: no-repeat;
+    }
+    .eyes.type2 {
+      background: url("/images/eye-2.svg");
+      background-repeat: no-repeat;
+    }
+    .eyes.type3 {
+      background: url("/images/eye-3.svg");
+      background-repeat: no-repeat;
+    }
+
 </style>
 <div class="all" >
   <div class="back">
