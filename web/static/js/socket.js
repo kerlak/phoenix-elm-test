@@ -64,7 +64,7 @@ const initEyes = function (payload) {
   const eyes = payload.map(eye => {
     const position = {
       x: eye.position_x,
-      y: Math.max(payload.position_y, 400)
+      y: Math.max(eye.position_y, 400)
     };
     const resp = {
       id: eye.id,
