@@ -69,6 +69,7 @@ const initEyes = function (payload) {
     const resp = {
       id: eye.id,
       life: eye.life,
+      skin: eye.skin,
       position
     }
     return resp;
@@ -98,6 +99,7 @@ channel.on("walk", payload => {
   const resp = {
     id: payload.id,
     life: payload.life,
+    skin: payload.skin,
     position
   }
   elmApp.ports.input.send(resp);

@@ -24,6 +24,7 @@ type alias Eyes =
 type alias Eye =
   { id: String
   , life: Int
+  , skin: Int
   , position: Mouse.Position
   }
 
@@ -75,7 +76,7 @@ set_eyes (all_eyes) =
   List.map (\eye -> new_eye(eye)) all_eyes.items
 
 new_eye message =
-  ( Eye message.id message.life message.position )
+  ( Eye message.id message.life message.skin message.position )
 
 remove_eye (model, id) =
   List.filter (\eye -> (eye.id /= id)) model.eyes
@@ -165,7 +166,7 @@ absoluteRight =
     , ("color", "#fff")
     , ("font-family", "Roboto")
     ]
-showEye point =
+showEye (point, skin) =
   let
     circleRadius =
       5
@@ -195,10 +196,10 @@ showEye point =
         ]
 
   in
-    div [ circleStyle, class "eyes", class "type3" ] [ ]
+    div [ circleStyle, class "eyes", class ("type" ++ toString(skin)) ] [ ]
 
 showEyes eye =
-    ( toString eye.id, lazy showEye eye.position )
+    ( toString eye.id, lazy showEye(eye.position, eye.skin))
 
 view : Model -> Html Msg
 view model =
