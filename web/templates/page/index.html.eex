@@ -112,7 +112,10 @@
       background-repeat: no-repeat;
     }
     .eyes.type2 {
-      background: url("/images/eye-2.svg");
+      width: 805px;
+      height: 362px;
+      background-image: url("/images/camp-fire.png");
+      background-size: 402px 175px;
       background-repeat: no-repeat;
     }
     .eyes.type3 {
