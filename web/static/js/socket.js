@@ -52,16 +52,18 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 // from connect if you don't care about authentication.
 
 // Elm integration
-const elmDiv = document.getElementById('elm-main')
-    , elmApp = Elm.TestApp.embed(elmDiv)
-
+const elmParticlesDiv = document.getElementById('elm-particles')
+    , elmParticles = Elm.Particles.embed(elmParticlesDiv)
 
 const elmCountdownDiv = document.getElementById('elm-countdown')
     , elmCountdown = Elm.Countdown.embed(elmCountdownDiv)
 
+const elmEyesDiv = document.getElementById('elm-eyes')
+    , elmEyes = Elm.Eyes.embed(elmEyesDiv)
+
 const showMessage = function (message, resp) {
   console.log(resp);
-  elmApp.ports.input.send(resp);
+  elmEyes.ports.input.send(resp);
 }
 
 const initEyes = function (payload) {
@@ -78,7 +80,7 @@ const initEyes = function (payload) {
     }
     return resp;
   })
-  elmApp.ports.init.send({items: eyes});
+  elmEyes.ports.init.send({items: eyes});
 }
 // Elm integration
 socket.connect()
@@ -90,7 +92,7 @@ channel.join()
   .receive("error", resp => { console.log("Unable to join", resp) })
 
 // Elm integration
-elmApp.ports.output.subscribe(function (elmMessage) {
+elmEyes.ports.output.subscribe(function (elmMessage) {
   const [message, body] = elmMessage;
   channel.push(message, body)
 });
@@ -106,11 +108,11 @@ channel.on("walk", payload => {
     skin: payload.skin,
     position
   }
-  elmApp.ports.input.send(resp);
+  elmEyes.ports.input.send(resp);
 })
 
 channel.on("delete_eye", payload => {
-  elmApp.ports.remove.send(payload.id);
+  elmEyes.ports.remove.send(payload.id);
 })
 // Elm integration
 
