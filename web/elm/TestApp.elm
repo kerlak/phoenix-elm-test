@@ -1,11 +1,10 @@
 port module TestApp exposing (..)
-import Html exposing (Html, Attribute, div, text, li)
+import Html exposing (Html, Attribute, div, text, li, ul)
 import Html.Keyed as Keyed
 import Html.Attributes exposing (..)
 import Html.Lazy exposing (lazy)
-import Time exposing (Time, second, minute, millisecond)
+import Time exposing (Time)
 import Random
-import Date exposing (Date)
 import Mouse exposing (position)
 import AnimationFrame exposing (..)
 
@@ -38,20 +37,14 @@ type alias Eye =
   }
 
 type alias Model =
-  { currentTime : Time
-  , goalTime : Time
-  , eyes : List Eye
+  { eyes : List Eye
   , particles: List Particle
   , currentSeed : Random.Seed
   }
-goalTimeString : String
-goalTimeString = "2017-04-21 14:00:00"
-goalTime : Time
-goalTime = createTime goalTimeString
 
 model : (Model, Cmd Msg)
 model =
-  (Model 0 goalTime [] [] (Random.initialSeed 3), Cmd.none)
+  (Model [] [] (Random.initialSeed 3), Cmd.none)
 
 --
 port init : (Eyes -> msg) -> Sub msg
@@ -63,8 +56,7 @@ port output : (String, Mouse.Position) -> Cmd msg
 -- UPDATE
 
 type Msg
-  = Tick Time
-  | GetMessage Eye
+  = GetMessage Eye
   | SetEyes Eyes
   | RemoveEye String
   | SendWave Mouse.Position
@@ -73,8 +65,6 @@ type Msg
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
-    Tick newTime ->
-      ({ model | currentTime = newTime }, Cmd.none)
     SetEyes all_eyes ->
       ({ model | eyes = (set_eyes(all_eyes)) }, Cmd.none)
     RemoveEye id ->
@@ -129,8 +119,7 @@ update_eye (eye, message) =
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch
-        [ AnimationFrame.times Tick
-        , input GetMessage
+        [ input GetMessage
         , init SetEyes
         , remove RemoveEye
         , Mouse.moves SendWave
@@ -156,12 +145,6 @@ twoDigitString number =
     |> String.append "0"
   else
     toString number
-
-createTime : String -> Time
-createTime str =
-  Date.fromString str
-  |> Result.withDefault (Date.fromTime 0)
-  |> Date.toTime
 
 -- VIEW
 myStyle : Attribute msg
@@ -252,59 +235,9 @@ showParticles particle =
 
 view : Model -> Html Msg
 view model =
-  let
-
-    delta =
-      model.goalTime - model.currentTime
-
-    ndays =
-      Time.inHours delta
-      |> floor
-      |> (flip (//)) 24
-
-    nhours =
-      Time.inHours delta
-      |> floor
-      |> (flip (-)) (ndays * 24)
-
-    nminutes =
-      Time.inMinutes delta
-      |> floor
-      |> (flip (-))(ndays * 24 * 60)
-      |> (flip (-))(nhours * 60)
-
-    nseconds =
-      Time.inSeconds delta
-      |> floor
-      |> (flip (-))(ndays * 24 * 60 * 60)
-      |> (flip (-))(nhours * 60 * 60)
-      |> (flip (-))(nminutes * 60)
-
-    nmillis =
-      Time.inMilliseconds delta
-      |> floor
-      |> (flip (-))(ndays * 24 * 60 * 60 * 1000)
-      |> (flip (-))(nhours * 60 * 60 * 1000)
-      |> (flip (-))(nminutes * 60 * 1000)
-      |> (flip (-))(nseconds * 1000)
-
-    countdown =
-      String.append (twoDigitString ndays)
-      <| String.append "d "
-      <| String.append (twoDigitString nhours)
-      <| String.append "h "
-      <| String.append (twoDigitString nminutes)
-      <| String.append "m "
-      <| String.append (twoDigitString nseconds)
-      <| String.append "s "
-      <| String.append (threeDigitString nmillis)
-      <| "ms"
-
-  in
-    div [ ] [
-        div [ absoluteRight ] [ text countdown ]
-      , Keyed.ul [ ] <|
-          List.map showEyes model.eyes
-      , Keyed.ul [ ] <|
-          List.map showParticles (List.reverse model.particles)
-    ]
+  div [ ] [
+      Keyed.ul [ ] <|
+        List.map showEyes model.eyes
+    , ul [ ]
+        (List.map (\particle -> showParticle(particle)) model.particles)
+  ]

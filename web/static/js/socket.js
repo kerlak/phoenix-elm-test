@@ -55,6 +55,10 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 const elmDiv = document.getElementById('elm-main')
     , elmApp = Elm.TestApp.embed(elmDiv)
 
+
+const elmCountdownDiv = document.getElementById('elm-countdown')
+    , elmCountdown = Elm.Countdown.embed(elmCountdownDiv)
+
 const showMessage = function (message, resp) {
   console.log(resp);
   elmApp.ports.input.send(resp);
