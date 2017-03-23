@@ -123,6 +123,59 @@
       background-repeat: no-repeat;
     }
 
+    .transluced {
+      opacity: 0 !important;
+      top: 150px !important;
+      width: 10px !important;
+      height: 10px !important;
+      background-color: red !important;
+    }
+/*
+    top: 300px;
+    transition: all 1s ease-out;
+*/
+
+    .hexagon {
+      opacity: 0.7;
+      width: 100px;
+      height: 100px;
+      top: 300px;
+      transition: all 1s ease-out;
+      background-color: #fdbf12;
+    }
+
+/*
+    .hexagon {
+      top: 300px;
+      transition: all 1s ease-out;
+
+      position: relative;
+      width: 20px;
+      height: 11.55px;
+      background-color: #fbfdff;
+      margin: 5.77px 0;
+    }
+
+    .hexagon:before,
+    .hexagon:after {
+      content: "";
+      position: absolute;
+      width: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+    }
+
+    .hexagon:before {
+      bottom: 100%;
+      border-bottom: 5.77px solid #fbfdff;
+    }
+
+    .hexagon:after {
+      top: 100%;
+      width: 0;
+      border-top: 5.77px solid #fbfdff;
+    }*/
+
 </style>
 <div class="all" >
   <div class="back">

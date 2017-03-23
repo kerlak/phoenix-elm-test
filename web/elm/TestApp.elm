@@ -3,7 +3,8 @@ import Html exposing (Html, Attribute, div, text, li)
 import Html.Keyed as Keyed
 import Html.Attributes exposing (..)
 import Html.Lazy exposing (lazy)
-import Time exposing (Time, second)
+import Time exposing (Time, second, minute, millisecond)
+import Random
 import Date exposing (Date)
 import Mouse exposing (position)
 import AnimationFrame exposing (..)
@@ -18,6 +19,14 @@ main =
     }
 
 -- MODEL
+type alias Particles =
+  { items: List Particle }
+
+type alias Particle =
+  { class: String
+  , left: Int
+  }
+
 type alias Eyes =
   { items: List Eye }
 
@@ -32,6 +41,8 @@ type alias Model =
   { currentTime : Time
   , goalTime : Time
   , eyes : List Eye
+  , particles: List Particle
+  , currentSeed : Random.Seed
   }
 goalTimeString : String
 goalTimeString = "2017-04-21 14:00:00"
@@ -40,7 +51,7 @@ goalTime = createTime goalTimeString
 
 model : (Model, Cmd Msg)
 model =
-  (Model 0 goalTime [], Cmd.none)
+  (Model 0 goalTime [] [] (Random.initialSeed 3), Cmd.none)
 
 --
 port init : (Eyes -> msg) -> Sub msg
@@ -57,6 +68,7 @@ type Msg
   | SetEyes Eyes
   | RemoveEye String
   | SendWave Mouse.Position
+  | NewParticle Time
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -71,6 +83,17 @@ update msg model =
       ({ model | eyes = (update_eyes(model, message)) }, Cmd.none)
     SendWave position ->
       (model, output ("walk", position))
+    NewParticle time ->
+      let
+        (number, nextSeed) = Random.step (Random.int 1 60) model.currentSeed
+      in
+        ({model | particles = (add_particle(model.particles, number)), currentSeed = nextSeed }, Cmd.none)
+
+add_particle (particles, number) =
+  let
+    particle_list = List.take 50 (List.map (\particle -> Particle "hexagon transluced" particle.left) particles)
+  in
+    Particle "hexagon" number :: particle_list
 
 set_eyes (all_eyes) =
   List.map (\eye -> new_eye(eye)) all_eyes.items
@@ -111,6 +134,7 @@ subscriptions model =
         , init SetEyes
         , remove RemoveEye
         , Mouse.moves SendWave
+        , AnimationFrame.times NewParticle
         ]
 
 -- UTIL FUNCTIONS
@@ -165,6 +189,9 @@ absoluteRight =
     , ("top", "10px")
     , ("color", "#fff")
     , ("font-family", "Roboto")
+    , ("width", "100vw")
+    , ("text-align", "center")
+    , ("line-height", "100vh")
     ]
 showEye (point, skin) =
   let
@@ -200,6 +227,28 @@ showEye (point, skin) =
 
 showEyes eye =
     ( toString eye.id, lazy showEye(eye.position, eye.skin))
+
+showParticle particle =
+  let
+    random_px =
+      "px"
+      |> String.append(toString(particle.left))
+    rotation =
+      "deg)"
+      |> String.append(toString(particle.left * 20))
+      |> String.append("rotate(")
+    random_left_style : Attribute msg
+    random_left_style =
+      style[
+          ("position", "absolute")
+        , ("left", random_px)
+        , ("transform", rotation)
+        ]
+  in
+    div [ class particle.class, random_left_style ] [ ]
+
+showParticles particle =
+  ( toString(particle.left), lazy showParticle(particle))
 
 view : Model -> Html Msg
 view model =
@@ -256,4 +305,6 @@ view model =
         div [ absoluteRight ] [ text countdown ]
       , Keyed.ul [ ] <|
           List.map showEyes model.eyes
+      , Keyed.ul [ ] <|
+          List.map showParticles (List.reverse model.particles)
     ]
