@@ -45,7 +45,8 @@ exports.config = {
       "test/static",
       "web/elm/Particles.elm",
       "web/elm/Countdown.elm",
-      "web/elm/Eyes.elm"
+      "web/elm/Eyes.elm",
+      "web/elm/Fps.elm"
     ],
 
     // Where to compile files to
@@ -56,7 +57,7 @@ exports.config = {
   plugins: {
     elmBrunch: {
       elmFolder: "web/elm",
-      mainModules: ["Particles.elm", "Countdown.elm", "Eyes.elm"],
+      mainModules: ["Particles.elm", "Countdown.elm", "Eyes.elm", "Fps.elm"],
       outputFolder: "../static/vendor"
     },
     babel: {

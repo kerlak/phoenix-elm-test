@@ -112,10 +112,7 @@
       background-repeat: no-repeat;
     }
     .eyes.type2 {
-      width: 805px;
-      height: 362px;
-      background-image: url("/images/camp-fire.png");
-      background-size: 402px 175px;
+      background: url("/images/eye-2.svg");
       background-repeat: no-repeat;
     }
     .eyes.type3 {
@@ -130,10 +127,30 @@
       height: 10px !important;
       background-color: red !important;
     }
-/*
-    top: 300px;
-    transition: all 1s ease-out;
-*/
+
+    #elm-fps {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: white;
+    }
+
+    #elm-countdown div {
+      width: 100vw;
+      top: 0px;
+      left: 0px;
+      position: absolute;
+      text-align: center;
+      line-height: 100vh;
+      color: white;
+    }
+
+    #elm-particles {
+      position: absolute;
+      top: 170px;
+      left: 200px;
+      /*filter: blur(7px);*/
+    }
 
     .hexagon {
       opacity: 0.7;
@@ -143,38 +160,6 @@
       transition: all 1s ease-out;
       background-color: #fdbf12;
     }
-
-/*
-    .hexagon {
-      top: 300px;
-      transition: all 1s ease-out;
-
-      position: relative;
-      width: 20px;
-      height: 11.55px;
-      background-color: #fbfdff;
-      margin: 5.77px 0;
-    }
-
-    .hexagon:before,
-    .hexagon:after {
-      content: "";
-      position: absolute;
-      width: 0;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-    }
-
-    .hexagon:before {
-      bottom: 100%;
-      border-bottom: 5.77px solid #fbfdff;
-    }
-
-    .hexagon:after {
-      top: 100%;
-      width: 0;
-      border-top: 5.77px solid #fbfdff;
-    }*/
 
 </style>
 <div class="all" >
@@ -201,3 +186,4 @@
 <div id="elm-particles"></div>
 <div id="elm-eyes"></div>
 <div id="elm-countdown"></div>
+<div id="elm-fps"></div>

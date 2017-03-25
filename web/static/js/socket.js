@@ -52,6 +52,10 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 // from connect if you don't care about authentication.
 
 // Elm integration
+
+const elmFpsDiv = document.getElementById('elm-fps')
+    , elmFps = Elm.Fps.embed(elmFpsDiv)
+
 const elmParticlesDiv = document.getElementById('elm-particles')
     , elmParticles = Elm.Particles.embed(elmParticlesDiv)
 

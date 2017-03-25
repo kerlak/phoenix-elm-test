@@ -1,8 +1,7 @@
 module Countdown exposing (..)
 import Html exposing (Html, Attribute, div, text)
-import Time exposing (Time)
+import Time exposing (Time, second)
 import Date exposing (Date)
-import AnimationFrame exposing (..)
 
 main : Program Never Model Msg
 main =
@@ -44,20 +43,10 @@ update msg model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch
-        [ AnimationFrame.times Tick
+        [ Time.every second Tick
         ]
 
 -- UTIL FUNCTIONS
-threeDigitString : Int -> String
-threeDigitString number =
-  if number < 100 && number > 10 then
-    toString number
-    |> String.append "0"
-  else if number < 10 then
-    toString number
-    |> String.append "00"
-  else
-    toString number
 
 twoDigitString : Int -> String
 twoDigitString number =
@@ -104,14 +93,6 @@ view model =
       |> (flip (-))(nhours * 60 * 60)
       |> (flip (-))(nminutes * 60)
 
-    nmillis =
-      Time.inMilliseconds delta
-      |> floor
-      |> (flip (-))(ndays * 24 * 60 * 60 * 1000)
-      |> (flip (-))(nhours * 60 * 60 * 1000)
-      |> (flip (-))(nminutes * 60 * 1000)
-      |> (flip (-))(nseconds * 1000)
-
     countdown =
       String.append (twoDigitString ndays)
       <| String.append "d "
@@ -120,9 +101,10 @@ view model =
       <| String.append (twoDigitString nminutes)
       <| String.append "m "
       <| String.append (twoDigitString nseconds)
-      <| String.append "s "
-      <| String.append (threeDigitString nmillis)
-      <| "ms"
+      <| "s"
 
   in
-    div [ ] [ text countdown ]
+    if model.currentTime /= 0 then
+      div [ ] [ text countdown ]
+    else
+      div [ ] [ ]
