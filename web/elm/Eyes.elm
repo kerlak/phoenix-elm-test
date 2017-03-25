@@ -1,8 +1,6 @@
 port module Eyes exposing (..)
-import Html exposing (Html, Attribute, div, li, ul)
-import Html.Keyed as Keyed
+import Html exposing (Html, Attribute, div, li, ul, text)
 import Html.Attributes exposing (..)
-import Html.Lazy exposing (lazy)
 import Mouse exposing (position)
 
 main : Program Never Model Msg
@@ -100,19 +98,13 @@ subscriptions model =
         , Mouse.moves SendWave
         ]
 
--- UTIL FUNCTIONS
-twoDigitString : Int -> String
-twoDigitString number =
-  if number < 10 then
-    toString number
-    |> String.append "0"
-  else
-    toString number
-
 -- VIEW
 
-showEye (point, skin) =
+showEye : Eye -> Html msg
+showEye (eye) =
   let
+    point = eye.position
+    skin = eye.skin
     circleRadius =
       5
     circleRadiusPx =
@@ -123,28 +115,24 @@ showEye (point, skin) =
       |> String.append(toString((circleRadius * 2)))
     top =
       "px"
-      |> String.append(twoDigitString (point.y - circleRadius))
+      |> String.append(toString(point.y - circleRadius))
     left =
       "px"
-      |> String.append(twoDigitString (point.x - circleRadius))
+      |> String.append(toString(point.x - circleRadius))
 
     circleStyle =
       style
         [ ("position", "absolute")
         , ("top", top)
         , ("left", left)
-        -- , ("transition", "top 1s ease-out, left 1s ease-out")
         ]
 
   in
     div [ circleStyle, class "eyes", class ("type" ++ toString(skin)) ] [ ]
 
-showEyes eye =
-    ( toString eye.id, lazy showEye(eye.position, eye.skin))
-
 view : Model -> Html Msg
 view model =
   div [ ] [
-      Keyed.ul [ ] <|
-        List.map showEyes model.eyes
+      ul [ ] <|
+        List.map (\eye -> showEye(eye)) model.eyes
   ]
