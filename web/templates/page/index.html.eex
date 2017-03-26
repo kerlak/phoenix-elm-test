@@ -105,6 +105,7 @@
       width: 40px;
       height: 20px;
       background-size: 40px 20px;
+      transition: all 0.3s ease-out;
     }
 
     .eyes.type1 {
@@ -202,11 +203,11 @@
 
     .hexagon {
       opacity: 0.7;
-      width: 100px;
-      height: 100px;
+      /*width: 100px;
+      height: 100px;*/
       top: 300px;
-      transition: all 1s ease-out;
-      background-color: #fdbf12;
+      /*transition: all 1s ease-out;*/
+      /*background-color: #fdbf12;*/
     }
 
 </style>
@@ -289,7 +290,7 @@
   </div>
 </div>
 
-<div id="elm-particles"></div>
+<div id="elm-fire"></div>
 <div id="elm-eyes"></div>
 <div id="elm-countdown"></div>
 <div id="elm-fps"></div>

@@ -56,8 +56,8 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 const elmFpsDiv = document.getElementById('elm-fps')
     , elmFps = Elm.Fps.embed(elmFpsDiv)
 
-const elmParticlesDiv = document.getElementById('elm-particles')
-    , elmParticles = Elm.Particles.embed(elmParticlesDiv)
+const elmFireDiv = document.getElementById('elm-fire')
+    , elmFire = Elm.Fire.embed(elmFireDiv)
 
 const elmCountdownDiv = document.getElementById('elm-countdown')
     , elmCountdown = Elm.Countdown.embed(elmCountdownDiv)
