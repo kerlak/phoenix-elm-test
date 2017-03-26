@@ -122,23 +122,23 @@
 
 
     .rocks{
-      position:absolute;
-      left:350px;
+      position: absolute;
+      left: 350px;
       top: 580px;
       display: block;
-      width: 400px;
+      width: 350px;
       height: 150px;
       z-index: 100
 
     }
 
     .logs{
-      position:absolute;
-      left:350px;
-      top: 500px;
+      position: absolute;
+      left: 420px;
+      top: 550px;
       display: block;
-      width: 400px;
-      height: 150px;
+      width: 225px;
+      height: 115px;
       z-index: 50;
 
       background-image: url("/images/logs.png");
