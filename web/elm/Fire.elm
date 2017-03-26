@@ -164,8 +164,8 @@ add_particle (particles, last_age, random_number) =
 new_particle : Int -> Particle
 new_particle random_number =
   let
-    initial_position = (Position (toFloat(random_number + 100)) 300)
-    goal_position = (Position (toFloat(random_number + 100)) 120)
+    initial_position = (Position (toFloat(random_number)) 180)
+    goal_position = (Position (toFloat(random_number)) 0)
   in
     (Particle initial_position initial_position goal_position 0)
 
