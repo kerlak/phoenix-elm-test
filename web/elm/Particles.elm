@@ -20,12 +20,14 @@ main =
 maxParticles : Int
 maxParticles = 50
 
-type alias Particles =
-  { items: List Particle }
+type alias Position =
+  { x: Int
+  , y: Int
+  }
 
 type alias Particle =
   { class: String
-  , left: Int
+  , initPosition: Position
   }
 
 type alias Model =
@@ -53,9 +55,9 @@ update msg model =
 
 add_particle (particles, number) =
   let
-    particle_list = List.take maxParticles (List.map (\particle -> Particle "hexagon transluced" particle.left) particles)
+    particle_list = List.take maxParticles (List.map (\particle -> Particle "hexagon transluced" particle.initPosition) particles)
   in
-    Particle "hexagon" number :: particle_list
+    Particle "hexagon" (Position number 0) :: particle_list
 
 -- SUBSCRIPTIONS
 
@@ -71,10 +73,10 @@ showParticle particle =
   let
     random_px =
       "px"
-      |> String.append(toString(particle.left))
+      |> String.append(toString(particle.initPosition.x))
     rotation =
       "deg)"
-      |> String.append(toString(particle.left * 20))
+      |> String.append(toString(particle.initPosition.x * 20))
       |> String.append("rotate(")
     random_left_style : Attribute msg
     random_left_style =
@@ -87,7 +89,7 @@ showParticle particle =
     div [ class particle.class, random_left_style ] [ ]
 
 showParticles particle =
-  ( toString(particle.left), lazy showParticle(particle))
+  ( toString(particle.initPosition.x), lazy showParticle(particle))
 
 view : Model -> Html Msg
 view model =
