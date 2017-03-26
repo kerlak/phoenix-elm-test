@@ -254,12 +254,11 @@ show_particle particle =
         , ("transform", rotation)
         ]
   in
-    div [ class "hexagon", particle_style ] [ ]
+    div [ particle_style ] [ ]
 
 view : Model -> Html Msg
 view model =
   div [ ] [
     ul [ ]
       <| List.map(\particle -> show_particle(particle)) model.particles
-  , div [ ] [ text (toString(model.last_particle_age)) ]
   ]
