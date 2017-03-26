@@ -125,8 +125,8 @@
 
     .rocks{
       position: absolute;
-      width: 195px;
-      height: 90px;
+      width: 235px;
+      height: 109px;
       z-index: 0
     }
 
@@ -192,7 +192,7 @@
     .campfire {
       position: absolute;
       top: calc(75vh - 45px);
-      left: calc(50vw - 97px);
+      left: calc(50vw - 118px);
     }
 
 </style>
