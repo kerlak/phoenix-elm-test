@@ -186,12 +186,14 @@
 
     #elm-countdown div {
       width: 100vw;
-      top: 0px;
+      top: 25px;
       left: 0px;
       position: absolute;
       text-align: center;
       line-height: 100vh;
       color: white;
+      font-family: Roboto;
+      font-size: 50px;
     }
 
     #elm-fire {
