@@ -1,7 +1,10 @@
 # Pet
 
-To start your Phoenix app:
+To start with docker
+ `docker-compose up`
 
+To start it locally without docker:
+  * Install elm
   * Install dependencies with `mix deps.get`
   * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
   * Install Node.js dependencies with `npm install`
