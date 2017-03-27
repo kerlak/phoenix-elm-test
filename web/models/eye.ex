@@ -2,10 +2,10 @@ defmodule Pet.Eye do
   @moduledoc """
   """
 
-  defstruct id: 0, life: 1, position_x: 0, position_y: 0, skin: 0, state: 0
+  defstruct id: 0, life: 1, position_x: 0, position_y: 0, skin: 0, state: 1
 
   def new() do
-    %__MODULE__{id: generate_id, skin: random_skin}
+    %__MODULE__{id: generate_id, skin: random_skin, state: 1}
   end
 
   def update(eye, position_x, position_y) do

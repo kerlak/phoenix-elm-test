@@ -64,9 +64,16 @@ update msg model =
     GetMessage message ->
       ({ model | eyes = (update_eyes(model, message)) }, Cmd.none)
     SendWave position ->
-      (model, output ("walk", position))
+      let
+        command =
+          if model.showEmotions then
+            Cmd.none
+          else
+            output ("walk", position)
+      in
+        (model, command)
     SwitchEmotions position ->
-      ({ model | showEmotions = not model.showEmotions, lastClickPosition = position }, Cmd.none)
+      ({ model | showEmotions = not model.showEmotions, lastClickPosition = position }, output ("walk", position))
     SendEmotion emotion ->
       (model, outputState("state", emotion))
 
@@ -166,9 +173,11 @@ view model =
     emotion_list =
       if model.showEmotions then
         div [ indexStyle ] [
-            div [ onClick (SendEmotion 1) ] [ text "1" ]
-          , div [ onClick (SendEmotion 2) ] [ text "2" ]
-          , div [ onClick (SendEmotion 3) ] [ text "3" ]
+            div [ onClick (SendEmotion 1), class "comic_message one" ] [ text "1" ]
+          , div [ onClick (SendEmotion 2), class "comic_message two" ] [ text "2" ]
+          , div [ onClick (SendEmotion 3), class "comic_message three" ] [ text "3" ]
+          , div [ onClick (SendEmotion 4), class "comic_message four" ] [ text "4" ]
+          , div [ onClick (SendEmotion 5), class "comic_message five" ] [ text "5" ]
         ]
       else
         div [ ] [ ]
