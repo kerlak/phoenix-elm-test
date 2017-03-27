@@ -31,6 +31,10 @@ defmodule Pet.Eyes do
     Agent.update(__MODULE__, fn(eyes) -> update_eyes(eyes, id, position_x, position_y) end)
   end
 
+  def change_state(id, new_state) do
+    Agent.update(__MODULE__, fn(eyes) -> change_state_eyes(eyes, id, new_state) end)
+  end
+
   def remove(id) do
     Agent.update(__MODULE__, fn(eyes) -> Enum.filter(eyes, fn(eye) -> eye.id != id end) end)
   end
@@ -43,6 +47,16 @@ defmodule Pet.Eyes do
     Enum.map(eyes, fn(eye) ->
       if eye.id == id do
         Eye.update(eye, position_x, position_y)
+      else
+        eye
+      end
+    end)
+  end
+
+  defp change_state_eyes(eyes, id, new_state) do
+    Enum.map(eyes, fn(eye) ->
+      if eye.id == id do
+        Eye.change_state(eye, new_state)
       else
         eye
       end

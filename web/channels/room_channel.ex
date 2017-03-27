@@ -48,14 +48,21 @@ defmodule Pet.RoomChannel do
     {:noreply, socket}
   end
 
+  def handle_in("state", %{"state" => new_state}, socket) do
+    id = socket.assigns[:user]
+    Eyes.change_state(id, new_state)
+    eye = Eyes.get(id)
+    broadcast socket "new_state", eye
+    {:noreply, socket}
+  end
 
   def handle_in("walk", %{"x" => position_x, "y" => position_y}, socket) do
-      id = socket.assigns[:user]
-      Eyes.walk(id, position_x, position_y)
-      eye = Eyes.get(id)
-      broadcast socket, "walk", eye
-      {:noreply, socket}
-    end
+    id = socket.assigns[:user]
+    Eyes.walk(id, position_x, position_y)
+    eye = Eyes.get(id)
+    broadcast socket, "walk", eye
+    {:noreply, socket}
+  end
   # def handle_in("wave", payload, socket) do
   #   broadcast socket, "wave", payload
   #   {:noreply, socket}

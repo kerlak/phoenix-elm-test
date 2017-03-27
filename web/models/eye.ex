@@ -2,7 +2,7 @@ defmodule Pet.Eye do
   @moduledoc """
   """
 
-  defstruct id: 0, life: 1, position_x: 0, position_y: 0, skin: 0
+  defstruct id: 0, life: 1, position_x: 0, position_y: 0, skin: 0, state: 0
 
   def new() do
     %__MODULE__{id: generate_id, skin: random_skin}
@@ -18,5 +18,9 @@ defmodule Pet.Eye do
 
   def random_skin() do
     :rand.uniform(3)
+  end
+
+  def change_state(eye, new_state) do
+    %{eye | state: new_state}
   end
 end
