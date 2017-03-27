@@ -16,6 +16,7 @@
     <main role="main">
       <%= render @view_module, @view_template, assigns %>
     </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js"></script>
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>
