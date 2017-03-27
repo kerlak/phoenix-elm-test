@@ -141,7 +141,7 @@ showEye (eye) =
         ]
   in
     div [ circleStyle, class "eyes", class ("type" ++ toString(skin)) ] [
-      div [ ] [ text (toString(eye.state)) ]
+      div [ class "comic_message" ] [ text (toString(eye.state)) ]
     ]
 
 view : Model -> Html Msg
