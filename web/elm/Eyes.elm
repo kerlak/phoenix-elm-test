@@ -1,6 +1,7 @@
 port module Eyes exposing (..)
 import Html exposing (Html, Attribute, div, li, ul, text)
 import Html.Attributes exposing (..)
+import Html.Events exposing (onClick)
 import Mouse exposing (position)
 
 main : Program Never Model Msg
@@ -21,21 +22,26 @@ type alias Eye =
   { id: String
   , life: Int
   , skin: Int
+  , state: Int
   , position: Mouse.Position
   }
 
 type alias Model =
-  { eyes : List Eye }
+  { eyes : List Eye
+  , showEmotions : Bool
+  , lastClickPosition : Mouse.Position
+  }
 
 model : (Model, Cmd Msg)
 model =
-  (Model [], Cmd.none)
+  (Model [] False (Mouse.Position 0 0), Cmd.none)
 
 --
 port init : (Eyes -> msg) -> Sub msg
 port input : (Eye -> msg) -> Sub msg
 port remove : (String -> msg) -> Sub msg
 port output : (String, Mouse.Position) -> Cmd msg
+port outputState : (String, Int) -> Cmd msg
 --
 
 -- UPDATE
@@ -45,6 +51,8 @@ type Msg
   | SetEyes Eyes
   | RemoveEye String
   | SendWave Mouse.Position
+  | SwitchEmotions Mouse.Position
+  | SendEmotion Int
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -57,12 +65,16 @@ update msg model =
       ({ model | eyes = (update_eyes(model, message)) }, Cmd.none)
     SendWave position ->
       (model, output ("walk", position))
+    SwitchEmotions position ->
+      ({ model | showEmotions = not model.showEmotions, lastClickPosition = position }, Cmd.none)
+    SendEmotion emotion ->
+      (model, outputState("state", emotion))
 
 set_eyes (all_eyes) =
   List.map (\eye -> new_eye(eye)) all_eyes.items
 
 new_eye message =
-  ( Eye message.id message.life message.skin message.position )
+  ( Eye message.id message.life message.skin message.state message.position )
 
 remove_eye (model, id) =
   List.filter (\eye -> (eye.id /= id)) model.eyes
@@ -84,7 +96,7 @@ add_eye (model, message) =
 
 update_eye (eye, message) =
   if eye.id == message.id then
-    { eye | position = message.position }
+    { eye | position = message.position, state = message.state }
   else
     eye
 -- SUBSCRIPTIONS
@@ -96,6 +108,7 @@ subscriptions model =
         , init SetEyes
         , remove RemoveEye
         , Mouse.moves SendWave
+        , Mouse.clicks SwitchEmotions
         ]
 
 -- VIEW
@@ -126,13 +139,43 @@ showEye (eye) =
         , ("top", top)
         , ("left", left)
         ]
-
   in
-    div [ circleStyle, class "eyes", class ("type" ++ toString(skin)) ] [ ]
+    div [ circleStyle, class "eyes", class ("type" ++ toString(skin)) ] [
+      div [ ] [ text (toString(eye.state)) ]
+    ]
 
 view : Model -> Html Msg
 view model =
-  div [ ] [
-      ul [ ] <|
-        List.map (\eye -> showEye(eye)) model.eyes
-  ]
+  let
+    left_px =
+      "px"
+      |> String.append(toString(model.lastClickPosition.x))
+
+    top_px =
+      "px"
+      |> String.append(toString(model.lastClickPosition.y))
+
+    indexStyle =
+      style
+        [ ("position", "absolute")
+        , ("cursor", "pointer")
+        , ("top", top_px)
+        , ("left", left_px)
+        , ("z-index", "1")
+        ]
+    emotion_list =
+      if model.showEmotions then
+        div [ indexStyle ] [
+            div [ onClick (SendEmotion 1) ] [ text "1" ]
+          , div [ onClick (SendEmotion 2) ] [ text "2" ]
+          , div [ onClick (SendEmotion 3) ] [ text "3" ]
+        ]
+      else
+        div [ ] [ ]
+  in
+    div [ ] [
+        emotion_list
+      , ul [ ] <|
+          List.map (\eye -> showEye(eye)) model.eyes
+
+    ]

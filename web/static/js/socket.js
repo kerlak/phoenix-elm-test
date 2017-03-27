@@ -80,6 +80,7 @@ const initEyes = function (payload) {
       id: eye.id,
       life: eye.life,
       skin: eye.skin,
+      state: eye.state,
       position
     }
     return resp;
@@ -101,6 +102,26 @@ elmEyes.ports.output.subscribe(function (elmMessage) {
   channel.push(message, body)
 });
 
+elmEyes.ports.outputState.subscribe(function (elmMessage) {
+  const [message, body] = elmMessage;
+  channel.push(message, body)
+});
+
+channel.on("state", payload => {
+  const position = {
+    x: payload.position_x,
+    y: Math.max(payload.position_y, 400)
+  };
+  const resp = {
+    id: payload.id,
+    life: payload.life,
+    skin: payload.skin,
+    state: payload.state,
+    position
+  }
+  elmEyes.ports.input.send(resp);
+})
+
 channel.on("walk", payload => {
   const position = {
     x: payload.position_x,
@@ -110,6 +131,7 @@ channel.on("walk", payload => {
     id: payload.id,
     life: payload.life,
     skin: payload.skin,
+    state: payload.state,
     position
   }
   elmEyes.ports.input.send(resp);
