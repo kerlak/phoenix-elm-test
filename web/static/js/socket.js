@@ -142,9 +142,13 @@ channel.on("delete_eye", payload => {
 })
 // Elm integration
 
-var theElement = document.getElementById("elm-countdown");
+var theElement1 = document.getElementById("elm-countdown");
+var theElement2 = document.getElementById("elm-eyes");
+var theElement3 = document.getElementById("floor");
 
-theElement.addEventListener("touchmove", handlerFunction, false);
+theElement1.addEventListener("touchmove", handlerFunction, false);
+theElement2.addEventListener("touchmove", handlerFunction, false);
+theElement3.addEventListener("touchmove", handlerFunction, false);
 
 function handlerFunction(event) {
 const x = Math.floor(event.changedTouches[0].pageX);

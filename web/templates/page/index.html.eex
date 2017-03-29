@@ -5,6 +5,7 @@
     margin: 0;
     padding: 0;
     overflow: hidden;
+    position: fixed;
   }
   .container {
     padding: 0;
@@ -29,14 +30,14 @@
   .sky {
     width: 100%;
     height: 100%;
-    background: -webkit-linear-gradient(top, #1e2431 0%,#445565 100%)
+    background: -webkit-linear-gradient(top, #1e2431 0%,#445565 100%);
   }
   .moon {
     position:absolute;
     width: 80px;
     height: 80px;
     top: 30px;
-    left: 200px;
+    left: 50vw;
     border-radius: 50%;
     overflow: hidden;
   }
@@ -47,7 +48,8 @@
     right: 20px;
     bottom: 12px;
     border-radius: 50%;
-    background-color: #232b38;
+    /*background-color: #232b38;*/
+    background: -webkit-linear-gradient(top, #1e2431 -20%,#445565 200%);
   }
   .whitemoon{
     position: absolute;
@@ -67,7 +69,7 @@
     border-left: 200px solid transparent;
     border-right: 150px solid transparent;
 
-    border-bottom: 200px solid #2f2f33;
+    border-bottom: 200px solid #6f6f6f;
   }
   .mountain2 {
     margin-top: -150px;
@@ -78,7 +80,7 @@
     border-left: 200px solid transparent;
     border-right: 200px solid transparent;
 
-    border-bottom: 200px solid #2f2f33;
+    border-bottom: 200px solid #42403e;
   }
 
   /*.eyes:before {
@@ -109,6 +111,11 @@
       height: 20px;
       background-size: 40px 20px;
       transition: all 0.3s ease-out;
+    }
+    @media screen and (max-width: 700px) {
+      .eyes {
+        transition: none; /* Improve performance on mobile devices */
+      }
     }
 
     .eyes.type1 {
@@ -153,8 +160,21 @@
       animation: comic 0.2s; /* IE 10+, Fx 29+ */
 
     }
+    @-moz-keyframes comic /* Firefox */
+    {
+      0%   {
+        margin: 0;
+        opacity: 0;
+        transform: scale(0);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
     @-webkit-keyframes comic {
       0%   {
+        margin: 0;
         opacity: 0;
         transform: scale(0);
       }
@@ -289,13 +309,14 @@
     }
 
     #elm-countdown div {
-      height: 200vh;
+      height: 200px;
       width: 100vw;
       top: 0px;
       left: 0px;
+      margin-top: 150px;
       position: absolute;
       text-align: right;
-      line-height: 355px;
+      line-height: 50px;
       color: white;
       font-family: Roboto;
       font-size: 50px;
@@ -336,7 +357,7 @@
     <div class="mountain2">
     </div>
   </div>
-  <div class="floor">
+  <div class="floor" id="floor">
     <div class="campfire">
 
       <div id="elm-fire"></div>
