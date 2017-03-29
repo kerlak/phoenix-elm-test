@@ -146,9 +146,12 @@ showEye (eye) =
         , ("top", top)
         , ("left", left)
         ]
+    stateClass =
+      (toString(eye.state))
+      |> String.append("comic_message selected image_")
   in
     div [ circleStyle, class "eyes", class ("type" ++ toString(skin)) ] [
-      div [ class "comic_message" ] [ text (toString(eye.state)) ]
+      div [ class stateClass ] [ ]
     ]
 
 view : Model -> Html Msg
@@ -173,11 +176,14 @@ view model =
     emotion_list =
       if model.showEmotions then
         div [ indexStyle ] [
-            div [ onClick (SendEmotion 1), class "comic_message one" ] [ text "1" ]
-          , div [ onClick (SendEmotion 2), class "comic_message two" ] [ text "2" ]
-          , div [ onClick (SendEmotion 3), class "comic_message three" ] [ text "3" ]
-          , div [ onClick (SendEmotion 4), class "comic_message four" ] [ text "4" ]
-          , div [ onClick (SendEmotion 5), class "comic_message five" ] [ text "5" ]
+            div [ onClick (SendEmotion 1), class "comic_message emoticon_1" ] [ ]
+          , div [ onClick (SendEmotion 2), class "comic_message emoticon_2" ] [ ]
+          , div [ onClick (SendEmotion 3), class "comic_message emoticon_3" ] [ ]
+          , div [ onClick (SendEmotion 4), class "comic_message emoticon_4" ] [ ]
+          , div [ onClick (SendEmotion 5), class "comic_message emoticon_5" ] [ ]
+          , div [ onClick (SendEmotion 6), class "comic_message emoticon_6" ] [ ]
+          , div [ onClick (SendEmotion 7), class "comic_message emoticon_7" ] [ ]
+          , div [ onClick (SendEmotion 8), class "comic_message emoticon_8" ] [ ]
         ]
       else
         div [ ] [ ]

@@ -53,8 +53,8 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 
 // Elm integration
 
-const elmFpsDiv = document.getElementById('elm-fps')
-    , elmFps = Elm.Fps.embed(elmFpsDiv)
+// const elmFpsDiv = document.getElementById('elm-fps')
+//     , elmFps = Elm.Fps.embed(elmFpsDiv)
 
 const elmFireDiv = document.getElementById('elm-fire')
     , elmFire = Elm.Fire.embed(elmFireDiv)
@@ -74,7 +74,7 @@ const initEyes = function (payload) {
   const eyes = payload.map(eye => {
     const position = {
       x: eye.position_x,
-      y: Math.max(eye.position_y, 400)
+      y: Math.max(eye.position_y, 220)
     };
     const resp = {
       id: eye.id,
@@ -93,7 +93,7 @@ socket.connect()
 // Now that you are connected, you can join channels with a topic:
 let channel = socket.channel("room:lobby", {})
 channel.join()
-  .receive("ok", resp => { console.log("Joined successfully", resp); initEyes(resp);})
+  .receive("ok", resp => { initEyes(resp);})
   .receive("error", resp => { console.log("Unable to join", resp) })
 
 // Elm integration
@@ -110,7 +110,7 @@ elmEyes.ports.outputState.subscribe(function (elmMessage) {
 channel.on("state", payload => {
   const position = {
     x: payload.position_x,
-    y: Math.max(payload.position_y, 400)
+    y: Math.max(payload.position_y, 220)
   };
   const resp = {
     id: payload.id,
@@ -125,7 +125,7 @@ channel.on("state", payload => {
 channel.on("walk", payload => {
   const position = {
     x: payload.position_x,
-    y: Math.max(payload.position_y, 400)
+    y: Math.max(payload.position_y, 220)
   };
   const resp = {
     id: payload.id,
@@ -141,5 +141,20 @@ channel.on("delete_eye", payload => {
   elmEyes.ports.remove.send(payload.id);
 })
 // Elm integration
+
+var theElement = document.getElementById("elm-countdown");
+
+theElement.addEventListener("touchmove", handlerFunction, false);
+
+function handlerFunction(event) {
+const x = Math.floor(event.changedTouches[0].pageX);
+const y = Math.floor(event.changedTouches[0].pageY);
+const position = {
+  x,
+  y
+}
+channel.push("walk", position)
+}
+
 
 export default socket
