@@ -47,4 +47,4 @@ const showNewTitle = function() {
   const newTitle = title.substr(0,position) + "/" + title.substr(position);
   document.title = newTitle;
 }
-setInterval(function(){ showNewTitle() }, 300);
+// setInterval(function(){ showNewTitle() }, 300);
