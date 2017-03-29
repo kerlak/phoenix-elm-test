@@ -19,7 +19,7 @@ type alias Model =
   , goalTime : Time
   }
 goalTimeString : String
-goalTimeString = "2017-04-21 14:00:00"
+goalTimeString = "2017-04-5 11:45:00"
 goalTime : Time
 goalTime = createTime goalTimeString
 
