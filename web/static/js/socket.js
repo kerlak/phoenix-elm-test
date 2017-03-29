@@ -102,6 +102,18 @@ elmEyes.ports.output.subscribe(function (elmMessage) {
   channel.push(message, body)
 });
 
+const skins = [
+  "",
+  "space invader",
+  "shit",
+  "ghost",
+  "fire",
+  "drops",
+  "huracan",
+  "empty",
+  "heart"
+];
+
 elmEyes.ports.outputState.subscribe(function (elmMessage) {
   const [message, body] = elmMessage;
   channel.push(message, body)
@@ -110,7 +122,7 @@ elmEyes.ports.outputState.subscribe(function (elmMessage) {
     ga('send', {
       hitType: 'event',
       eventCategory: 'change_skin',
-      eventAction: JSON.stringify(body),
+      eventAction: skins[parseInt(JSON.stringify(body))],
       eventLabel: 'eyes'
     });
   }
