@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="author" content="Undercover Labs">
 
     <title>/Undercover</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
