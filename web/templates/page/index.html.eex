@@ -110,7 +110,7 @@
       width: 40px;
       height: 20px;
       background-size: 40px 20px;
-      transition: all 0.3s ease-out;
+      transition: all 0.1s ease-out;
     }
     @media screen and (max-width: 700px) {
       .eyes {
