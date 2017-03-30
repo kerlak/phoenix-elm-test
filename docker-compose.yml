@@ -15,9 +15,12 @@ services:
       - DATABASE_HOST=postgres
     ports:
       - 4000:4000
+      # - 80:80
     volumes:
       - ./:/code
     # ONline use:
     entrypoint: /bin/bash -c "set -e -x && cd /code && mkdir -p priv/repo/migrations && yes | mix local.rebar --force && yes | mix deps.get && mix ecto.create && mix ecto.migrate && yes | npm install && mix phoenix.server"
+    # PRODUCTION use:
+    # entrypoint: /bin/bash -c "set -e -x && cd /code && mkdir -p priv/repo/migrations && yes | mix local.rebar --force && yes | MIX_ENV=prod mix deps.get && MIX_ENV=prod mix ecto.create && MIX_ENV=prod mix ecto.migrate && yes | npm install && MIX_ENV=prod mix compile.protocols && MIX_ENV=prod PORT=80 elixir -pa _build/prod/consolidated -S mix phoenix.server"
     # OFFline use:
     # entrypoint: /bin/bash -c "set -e -x && cd /code && mkdir -p priv/repo/migrations && mix phoenix.server"
