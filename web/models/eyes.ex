@@ -53,7 +53,7 @@ defmodule Pet.Eyes do
     end)
   end
 
-  defp change_state_eyes(eyes, id, new_state) do when is_integer(new_state) do
+  defp change_state_eyes(eyes, id, new_state) when is_integer(new_state) do
     Enum.map(eyes, fn(eye) ->
       if eye.id == id do
         Eye.change_state(eye, new_state)
