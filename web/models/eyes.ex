@@ -43,11 +43,7 @@ defmodule Pet.Eyes do
     Enum.count(all())
   end
 
-  defp update_eyes(eyes, id, position_x, position_y)
-    when
-          is_integer(position_x)
-      and is_integer(position_y)
-    do
+  defp update_eyes(eyes, id, position_x, position_y) when is_integer(position_x) and is_integer(position_y) do
     Enum.map(eyes, fn(eye) ->
       if eye.id == id do
         Eye.update(eye, position_x, position_y)
@@ -57,10 +53,7 @@ defmodule Pet.Eyes do
     end)
   end
 
-  defp change_state_eyes(eyes, id, new_state) do
-    when
-          is_integer(new_state)
-    do
+  defp change_state_eyes(eyes, id, new_state) do when is_integer(new_state) do
     Enum.map(eyes, fn(eye) ->
       if eye.id == id do
         Eye.change_state(eye, new_state)
