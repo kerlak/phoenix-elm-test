@@ -21,6 +21,6 @@ services:
     # ONline use:
     entrypoint: /bin/bash -c "set -e -x && cd /code && mkdir -p priv/repo/migrations && yes | mix local.rebar --force && yes | mix deps.get && mix ecto.create && mix ecto.migrate && yes | npm install && mix phoenix.server"
     # PRODUCTION use:
-    # entrypoint: /bin/bash -c "set -e -x && cd /code && mkdir -p priv/repo/migrations && yes | mix local.rebar --force && yes | mix deps.get && MIX_ENV=prod mix compile && brunch build --production && MIX_ENV=prod mix phoenix.digest && MIX_ENV=prod mix ecto.create && MIX_ENV=prod mix ecto.migrate && yes | npm install && MIX_ENV=prod PORT=80 mix phoenix.server"
+    # entrypoint: /bin/bash -c "set -e -x && cd /code && mkdir -p priv/repo/migrations && yes | mix local.rebar --force && yes | mix deps.get && yes | npm install && MIX_ENV=prod mix compile && yes | npm install -g brunch && brunch build --production && MIX_ENV=prod mix phoenix.digest && MIX_ENV=prod mix ecto.create && MIX_ENV=prod mix ecto.migrate && MIX_ENV=prod PORT=80 mix phoenix.server"
     # OFFline use:
     # entrypoint: /bin/bash -c "set -e -x && cd /code && mkdir -p priv/repo/migrations && mix phoenix.server"
