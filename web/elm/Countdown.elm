@@ -68,7 +68,10 @@ view model =
   let
 
     delta =
-      model.goalTime - model.currentTime
+      if (model.goalTime - model.currentTime) < 0 then
+        0
+      else
+        model.goalTime - model.currentTime
 
     ndays =
       Time.inHours delta
