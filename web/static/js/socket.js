@@ -57,129 +57,133 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 //     , elmFps = Elm.Fps.embed(elmFpsDiv)
 
 const elmFireDiv = document.getElementById('elm-fire')
-    , elmFire = Elm.Fire.embed(elmFireDiv)
+    , elmFire = elmFireDiv ? Elm.Fire.embed(elmFireDiv) : null
 
 const elmCountdownDiv = document.getElementById('elm-countdown')
-    , elmCountdown = Elm.Countdown.embed(elmCountdownDiv)
+    , elmCountdown = elmCountdownDiv ? Elm.Countdown.embed(elmCountdownDiv) : null
 
 const elmEyesDiv = document.getElementById('elm-eyes')
-    , elmEyes = Elm.Eyes.embed(elmEyesDiv)
+    , elmEyes = elmEyesDiv ? Elm.Eyes.embed(elmEyesDiv) : null
 
-const showMessage = function (message, resp) {
-  console.log(resp);
-  elmEyes.ports.input.send(resp);
-}
 
-const initEyes = function (payload) {
-  const eyes = payload.map(eye => {
+if (elmFire && elmCountdown && elmEyes) {
+  const showMessage = function (message, resp) {
+    console.log(resp);
+    elmEyes.ports.input.send(resp);
+  }
+
+  const initEyes = function (payload) {
+    const eyes = payload.map(eye => {
+      const position = {
+        x: eye.position_x,
+        y: Math.max(eye.position_y, 220)
+      };
+      const resp = {
+        id: eye.id,
+        life: eye.life,
+        skin: eye.skin,
+        state: eye.state,
+        position
+      }
+      return resp;
+    })
+    elmEyes.ports.init.send({items: eyes});
+  }
+  // Elm integration
+  socket.connect()
+
+  // Now that you are connected, you can join channels with a topic:
+  let channel = socket.channel("room:lobby", {})
+  channel.join()
+    .receive("ok", resp => { initEyes(resp);})
+    .receive("error", resp => { console.log("Unable to join", resp) })
+
+  // Elm integration
+  elmEyes.ports.output.subscribe(function (elmMessage) {
+    const [message, body] = elmMessage;
+    channel.push(message, body)
+  });
+
+  const skins = [
+    "",
+    "space invader",
+    "shit",
+    "ghost",
+    "fire",
+    "drops",
+    "huracan",
+    "empty",
+    "heart"
+  ];
+
+  elmEyes.ports.outputState.subscribe(function (elmMessage) {
+    const [message, body] = elmMessage;
+    channel.push(message, body)
+
+    if(ga) {
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'change_skin',
+        eventAction: skins[parseInt(JSON.stringify(body))],
+        eventLabel: 'eyes'
+      });
+    }
+  });
+
+  channel.on("state", payload => {
     const position = {
-      x: eye.position_x,
-      y: Math.max(eye.position_y, 220)
+      x: payload.position_x,
+      y: Math.max(payload.position_y, 220)
     };
     const resp = {
-      id: eye.id,
-      life: eye.life,
-      skin: eye.skin,
-      state: eye.state,
+      id: payload.id,
+      life: payload.life,
+      skin: payload.skin,
+      state: payload.state,
       position
     }
-    return resp;
+    elmEyes.ports.input.send(resp);
   })
-  elmEyes.ports.init.send({items: eyes});
+
+  channel.on("walk", payload => {
+    const position = {
+      x: payload.position_x,
+      y: Math.max(payload.position_y, 220)
+    };
+    const resp = {
+      id: payload.id,
+      life: payload.life,
+      skin: payload.skin,
+      state: payload.state,
+      position
+    }
+    elmEyes.ports.input.send(resp);
+  })
+
+  channel.on("delete_eye", payload => {
+    elmEyes.ports.remove.send(payload.id);
+  })
+  // Elm integration
+
+  var theElement1 = document.getElementById("elm-countdown");
+  var theElement2 = document.getElementById("elm-eyes");
+  var theElement3 = document.getElementById("floor");
+
+  theElement1.addEventListener("touchmove", handlerFunction, false);
+  theElement2.addEventListener("touchmove", handlerFunction, false);
+  theElement3.addEventListener("touchmove", handlerFunction, false);
+
+  function handlerFunction(event) {
+    const x = Math.floor(event.changedTouches[0].pageX);
+    const y = Math.floor(event.changedTouches[0].pageY);
+    const position = {
+      x,
+      y
+    }
+    channel.push("walk", position)
+  }
 }
-// Elm integration
-socket.connect()
 
-// Now that you are connected, you can join channels with a topic:
-let channel = socket.channel("room:lobby", {})
-channel.join()
-  .receive("ok", resp => { initEyes(resp);})
-  .receive("error", resp => { console.log("Unable to join", resp) })
-
-// Elm integration
-elmEyes.ports.output.subscribe(function (elmMessage) {
-  const [message, body] = elmMessage;
-  channel.push(message, body)
-});
-
-const skins = [
-  "",
-  "space invader",
-  "shit",
-  "ghost",
-  "fire",
-  "drops",
-  "huracan",
-  "empty",
-  "heart"
-];
-
-elmEyes.ports.outputState.subscribe(function (elmMessage) {
-  const [message, body] = elmMessage;
-  channel.push(message, body)
-
-  if(ga) {
-    ga('send', {
-      hitType: 'event',
-      eventCategory: 'change_skin',
-      eventAction: skins[parseInt(JSON.stringify(body))],
-      eventLabel: 'eyes'
-    });
-  }
-});
-
-channel.on("state", payload => {
-  const position = {
-    x: payload.position_x,
-    y: Math.max(payload.position_y, 220)
-  };
-  const resp = {
-    id: payload.id,
-    life: payload.life,
-    skin: payload.skin,
-    state: payload.state,
-    position
-  }
-  elmEyes.ports.input.send(resp);
-})
-
-channel.on("walk", payload => {
-  const position = {
-    x: payload.position_x,
-    y: Math.max(payload.position_y, 220)
-  };
-  const resp = {
-    id: payload.id,
-    life: payload.life,
-    skin: payload.skin,
-    state: payload.state,
-    position
-  }
-  elmEyes.ports.input.send(resp);
-})
-
-channel.on("delete_eye", payload => {
-  elmEyes.ports.remove.send(payload.id);
-})
-// Elm integration
-
-var theElement1 = document.getElementById("elm-countdown");
-var theElement2 = document.getElementById("elm-eyes");
-var theElement3 = document.getElementById("floor");
-
-theElement1.addEventListener("touchmove", handlerFunction, false);
-theElement2.addEventListener("touchmove", handlerFunction, false);
-theElement3.addEventListener("touchmove", handlerFunction, false);
-
-function handlerFunction(event) {
-  const x = Math.floor(event.changedTouches[0].pageX);
-  const y = Math.floor(event.changedTouches[0].pageY);
-  const position = {
-    x,
-    y
-  }
-  channel.push("walk", position)
-}
 
 // Google Analytics
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

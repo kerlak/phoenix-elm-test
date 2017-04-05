@@ -17,10 +17,10 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:100" rel="stylesheet">
   </head>
 
-  <body>
+  <!-- <body> -->
     <main role="main">
       <%= render @view_module, @view_template, assigns %>
     </main>
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
-  </body>
+  <!-- </body> -->
 </html>

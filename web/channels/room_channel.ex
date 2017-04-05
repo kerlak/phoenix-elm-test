@@ -2,6 +2,7 @@ defmodule Pet.RoomChannel do
   use Pet.Web, :channel
 
   alias Pet.Eyes
+  alias Pet.User
 
   def join("room:lobby", payload, socket) do
     if authorized?(payload) do

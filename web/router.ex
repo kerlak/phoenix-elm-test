@@ -17,6 +17,8 @@ defmodule Pet.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+    get "/hacknoon", UserController, :index
+    post "/hacknoon", UserController, :create
   end
 
   # Other scopes may use custom stacks.
