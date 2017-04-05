@@ -1,5 +1,6 @@
 module Countdown exposing (..)
-import Html exposing (Html, Attribute, div, text)
+import Html exposing (Html, Attribute, div, text, a)
+import Html.Attributes exposing (class, href)
 import Time exposing (Time, second)
 import Date exposing (Date)
 
@@ -107,7 +108,9 @@ view model =
       <| "s"
 
   in
-    if model.currentTime /= 0 then
+    if delta > 0 then
       div [ ] [ text countdown ]
     else
-      div [ ] [ ]
+      div [ class "apuntate" ] [
+        a [ href "pyrohack" ] [ text "Apúntate" ]
+      ]

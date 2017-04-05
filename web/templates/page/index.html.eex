@@ -117,6 +117,11 @@
       .eyes {
         transition: none; /* Improve performance on mobile devices */
       }
+
+      #elm-countdown a {
+        background: rgba(34, 34, 34, 0.53);
+      }
+
     }
 
     .eyes.type1 {
@@ -321,6 +326,24 @@
       color: white;
       font-family: Roboto;
       font-size: 50px;
+    }
+
+    #elm-countdown .apuntate {
+      left: auto;
+      right: 0px;
+      margin: 30px;
+    }
+
+    #elm-countdown a {
+      color: white;
+      text-decoration: none;
+      border: 1px solid white;
+      padding: 10px;
+      border-radius: 3px;
+      box-sizing: border-box;
+      line-height: 100px;
+      z-index: 100;
+      top: 96px;
     }
 
     #elm-fire {
