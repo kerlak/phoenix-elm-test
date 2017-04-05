@@ -37,7 +37,7 @@ config :phoenix, :stacktrace_depth, 20
 config :pet, Pet.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "postgres",
-  password: "postgres",
+  password: "postgresUndercover17",
   database: "pet_dev",
   hostname: System.get_env("DATABASE_HOST") || "localhost",
   pool_size: 10

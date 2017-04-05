@@ -4,7 +4,7 @@ services:
     image: postgres
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PASSWORD=postgresUndercover17
     ports:
       - 5432:5432
     volumes:
