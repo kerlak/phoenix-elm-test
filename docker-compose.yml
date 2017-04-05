@@ -7,6 +7,8 @@ services:
       - POSTGRES_PASSWORD=postgres
     ports:
       - 5432:5432
+    volumes:
+      - ./var/lib/postgresql/data:/var/lib/postgresql/data
   phoenix:
     image: kerlak/debian-phoenix-elm
     links:
