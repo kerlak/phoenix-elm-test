@@ -3,6 +3,7 @@ import Html exposing (Html, Attribute, div, text, a)
 import Html.Attributes exposing (class, href)
 import Time exposing (Time, second)
 import Date exposing (Date)
+import AnimationFrame exposing (..)
 
 main : Program Never Model Msg
 main =
@@ -45,6 +46,7 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch
         [ Time.every second Tick
+        , AnimationFrame.times Tick
         ]
 
 -- UTIL FUNCTIONS
