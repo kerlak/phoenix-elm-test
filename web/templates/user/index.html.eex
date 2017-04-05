@@ -76,7 +76,7 @@
 
 
                                 <div class="mb30 buttons">
-                                    <a href="#joinus" class="btn btn-lg btn-rounded btn-dark" style="background-color:#0975b5!important">Apuntate!</a>
+                                    <a href="#joinus" class="btn btn-lg btn-rounded btn-dark" style="background-color:#0975b5!important">Apúntate!</a>
 
                                 </div>
                             </div>
@@ -98,10 +98,9 @@
                             Tendremos cerveza, pizzas, regalos...
                         </p>
 
-                        <p class="mt20 mb30">
+                        <h2 class="mt20 mb30">
                           ¡Pyro Hack es para todo el mundo!
-
-                        </p>
+                        </h2>
                     </div>
                 </div>
                 <div class="row">
@@ -135,7 +134,7 @@
                             </div>
                             <h4>Muchas sorpresas</h4>
                             <p>
-                                Habrá muchas sorpresas para todos los asistentes, y en breves anunciaremos los premios para los ganadores... ¡Estad atentos!
+                                Habrá muchas sorpresas para todos los asistentes, y en breve anunciaremos los premios para los ganadores... ¡Estad atentos!
                             </p>
                         </div>
                     </div><!--/column-->
@@ -232,13 +231,13 @@
                     <div class="col-sm-4 mb40">
                         <h4 class="font300">¿Necesito un equipo para participar?</h4>
                         <p>
-                          Es aconsejable que os apuntéis en equipos de cuatro personas. Busca bien con quién te alías, será el primer paso hacia el éxito. Si no tienes con quién apuntarte no es un impedimento! Te buscaremos un equipo y ya se agrupará en función de lo queráis aportar.
+                          Es aconsejable que os apuntéis en equipos de cuatro personas. Busca bien con quién te alías, será el primer paso hacia el éxito. Si no tienes con quién apuntarte no es un impedimento! Te buscaremos un equipo y ya se agrupará en función de lo queráis que aportar.
                         </p>
                     </div><!--/col-->
                     <div class="col-sm-4 mb40">
                         <h4 class="font300">¿Qué necesito llevar?</h4>
                         <p>
-                          Para participar en el BluetabHack tienes que traer la confirmación de inscripción, tu ordenador portátil, una libreta bolígrafos y todo lo que creaís necesario. De lo demás nos encargamos nosotros (incluida la comida y las cervezas ;)).
+                          Para participar en el PyroHack tienes que traer la confirmación de inscripción, tu ordenador portátil, una libreta bolígrafos y todo lo que creaís necesario. De lo demás nos encargamos nosotros (incluida la comida y las cervezas ;)).
                         </p>
                     </div><!--/col-->
 
@@ -253,7 +252,7 @@
                     <div class="col-sm-4 mb40">
                         <h4 class="font300">¿Tengo que pagar?</h4>
                         <p>
-                            No. El BluetabHack es un evento gratuito. Todo está incluido
+                            No. El PyroHack es un evento gratuito. Todo está incluido
                         </p>
                     </div><!--/col-->
                     <div class="col-sm-4 mb40">
